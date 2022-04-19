@@ -1,4 +1,5 @@
 const transporter = require ('../service/settings')
+const Mail = require('../model/Mail')
 
 exports.sendmail = async function(req, res) {
     var mailOptions = {
@@ -13,5 +14,21 @@ exports.sendmail = async function(req, res) {
         console.log('Email sent');
     } catch(e) {
         console.log(e);
+    }
+}
+
+exports.sendmailtoDB = async function(req,res) {
+    let mail = new Mail({
+        user: req.body.user,
+        platform: req.body.platform,
+        email: req.body.email
+    })
+    try {
+        mail = await mail.save()
+        res.send(mail)
+        console.log(mail)
+    } catch(e) {
+        res.send(e)
+        console.log(e)
     }
 }
